@@ -1,0 +1,122 @@
+string telegramIdListe = "1234567\t7654321";
+string telegramId;
+string message = "";
+
+object src = dom.GetObject("$src$");
+if (src) {
+    ! Gerät
+    if(src.TypeName() == "HSSDP") {
+        string sourcename = (dom.GetObject(dom.GetObject(src)).Channel()).Name();
+    } else {
+        ! SysVar
+        if(src.TypeName() == "VARDP") {
+            string sourcename = src.Name();
+	} else {
+	    string sourcename = "Weder Device noch SysVar.";
+	}
+    }
+} else {
+    string sourcename = "Keine source, ggf. Skript manuell gestartet?";
+}
+
+
+!Arbeitszimmer
+var status = dom.GetObject(ID_DATAPOINTS).Get("HmIP-RF.0000DA498DFFFF:1.STATE").Value();
+string name = "Arbeitszimmer";
+if (status == 0) {
+!message = message + name  +  ":geschlossen\n";
+} 
+else {message = message + name  + ":offen\n";} ;
+
+!Bad
+var status = dom.GetObject(ID_DATAPOINTS).Get("HmIP-RF.0000DA498DFFFF:1.STATE").Value();
+string name = "Bad";
+if (status == 0) {
+!message = message + name  +  ":geschlossen\n";
+} 
+else {message = message + name  + ":offen\n";};
+
+!Bad Eltern
+var status = dom.GetObject(ID_DATAPOINTS).Get("HmIP-RF.0000DA498DFFFF:1.STATE").Value();
+string name = "Bad Eltern";
+if (status == 0) {
+!message = message + name  +  ":geschlossen\n";
+} 
+else {message = message + name  + ":offen\n";};
+
+
+!Esszimmer
+var status = dom.GetObject(ID_DATAPOINTS).Get("HmIP-RF.0000DA498DFFFF:1.STATE").Value();
+string name = "Esszimmer";
+if (status == 0) {
+!message = message + name  +  ":geschlossen\n";
+} 
+else {message = message + name  + ":offen\n";};
+
+!Schlafzimmer
+var status = dom.GetObject(ID_DATAPOINTS).Get("HmIP-RF.0000DA498DFFFF:1.STATE").Value();
+string name = "Schlafzimmer";
+if (status == 0) {
+!message = message + name  +  ":geschlossen\n";
+} 
+else {message = message + name  + ":offen\n";};
+
+!Haustüre
+var status = dom.GetObject(ID_DATAPOINTS).Get("HmIP-RF.0000DA498DFFFF:1.STATE").Value();
+string name = "Haustüre";
+if (status == 0) {
+!message = message + name  +  ":geschlossen\n";
+} 
+else {message = message + name  + ":offen\n";};
+
+
+!Jule
+var status = dom.GetObject(ID_DATAPOINTS).Get("HmIP-RF.0000DA498DFFFF:1.STATE").Value();
+string name = "Jule";
+if (status == 0) {
+!message = message + name  +  ":geschlossen\n";
+} 
+else {message = message + name  + ":offen\n";};
+
+!Keller
+var status = dom.GetObject(ID_DATAPOINTS).Get("HmIP-RF.0000DA498DFFFF:1.STATE").Value();
+string name = "Keller";
+if (status == 0) {
+!message = message + name  +  ":geschlossen\n";
+} 
+else {message = message + name  + ":offen\n";};
+
+!OG Arbeitszimmer
+var status = dom.GetObject(ID_DATAPOINTS).Get("HmIP-RF.0000DA498DFFFF:1.STATE").Value();
+string name = "Gabi Arbeitszimmer";
+if (status == 0) {
+!message = message + name  +  ":geschlossen\n";
+} 
+else {message = message + name  + ":offen\n";};
+
+!Wohnzimmer
+var status = dom.GetObject(ID_DATAPOINTS).Get("HmIP-RF.0000DA498DFFFF:1.STATE").Value();
+string name = "Wohnzimmer";
+if (status == 0) {
+!message = message + name  +  ":geschlossen\n";
+} 
+else {message = message + name  + ":offen\n";};
+
+!Küche
+var status = dom.GetObject(ID_DATAPOINTS).Get("HmIP-RF.0000DA498DFFFF:1.STATE").Value();
+string name = "Küche";
+if (status == 0) {
+!message = message + name  +  ":geschlossen\n";
+} 
+else {message = message + name  + ":offen\n";};
+
+message = message + "Auslöser: "+ sourcename;
+
+string kodiert = message.ToUTF8().UriEncode();
+if (kodiert != "") {
+ foreach (telegramId, telegramIdListe ) { 
+ string s_cmd = "curl 'https://api.telegram.org/bot12345678:XXX-zzzzzzzzzzzzzzzzzzzzzz/sendMessage?chat_id=" # telegramId # "&text=" # kodiert # "'";
+ dom.GetObject("CUxD.CUX2801001:3.CMD_EXEC").State (s_cmd);
+ }
+}
+
